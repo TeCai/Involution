@@ -76,7 +76,7 @@ class Involution1D(nn.Module):
         x_unfolded = x_unfolded.view(Batch_Size, self.Group, self.in_channel//self.Group, self.kernel_size,-1) #(B,G,C//G,Length)
         kernel = spanned.view(Batch_Size, self.Group, self.kernel_size, -1).unsqueeze(2)
         
-        #Boardcast and adding
+        #Boardcasting and adding
         
         out = torch.mul(kernel,x_unfolded).sum(dim = 3) #dim of kernel_size
         out = out.view(Batch_Size, self.in_channel, -1)
@@ -138,7 +138,7 @@ class Involution2D(nn.Module):
         if (in_channel % Group) != 0 :
             raise ValueError('in_channels must be divisible by groups')
         if padding*2+1 != kernel_size:
-                raise ValueError('kernel_size must match with padding s.t. kernel_size = padding*2+1 while dilation = 1')
+            raise ValueError('kernel_size must match with padding s.t. kernel_size = padding*2+1 while dilation = 1')
 
     def forward(self,x):
         reduced = self.reduce(x)
@@ -149,7 +149,7 @@ class Involution2D(nn.Module):
         x_unfolded = x_unfolded.view(Batch_Size, self.Group, self.in_channel//self.Group, self.kernel_size**2, H, W) #(B,G,C//G,K*K,H,W)
         kernel = spanned.view(Batch_Size, self.Group, self.kernel_size**2, H, W).unsqueeze(2)
         
-        #Boardcast and adding
+        #Boardcasting and adding
         
         out = torch.mul(kernel,x_unfolded).sum(dim = 3) #dim of kernel_size       
         out = out.view(Batch_Size, self.in_channel, H, W)
